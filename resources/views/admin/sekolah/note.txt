@@ -1,0 +1,3 @@
+1. upload gamabr lebih dari 1, downloadnya zip
+2. filter per tahun dan bulan kemudian di export print pdf
+3. keterangan dibawah logo, sekolah dan asrama
