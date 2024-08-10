@@ -24,11 +24,11 @@ Route::controller(SchoolPurchaseController::class)->group(function () {
     Route::get('/good-items-school', 'goodItems')->name('good-items-school');
     Route::get('/damaged-items-school', 'damagedItems')->name('damaged-items-school');
 
-    Route::post('/school-purchases', 'store')->name('school-purchases.store');
+    Route::post('/school-purchase', 'store')->name('school-purchases.store');
     Route::get('/school-purchases/{id}/download', 'download')->name('school-purchases.download');
 
     Route::get('/school-purchases/create', 'create')->name('school-purchases.create');
-    Route::get('/school-purchases/{id}/edit', 'edit')->name('school-purchases.edit');
+    Route::get('/school-purchases/{id}/edit', 'edited')->name('school-purchases.edit');
     Route::put('/school-purchases/{id}', 'update')->name('school-purchases.update');
     Route::delete('/school-purchases/{id}', 'destroy')->name('school-purchases.destroy');
     Route::get('/school-purchases/print', 'print')->name('school-purchases.print');
@@ -44,7 +44,7 @@ Route::controller(DormPurchaseController::class)->group(function () {
     Route::get('/good-items-dorm', 'goodItems')->name('good-items-dorm');
     Route::get('/damaged-items-dorm', 'damagedItems')->name('damaged-items-dorm');
 
-    Route::post('/dorm-purchases', 'store')->name('dorm-purchases.store');
+    Route::post('/dorm-purchase', 'store')->name('dorm-purchases.store');
     Route::get('/dorm-purchases/{id}/download', 'download')->name('dorm-purchases.download');
 
     Route::get('/dorm-purchases/create', 'create')->name('dorm-purchases.create');

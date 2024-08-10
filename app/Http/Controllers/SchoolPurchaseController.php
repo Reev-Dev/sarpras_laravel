@@ -103,14 +103,14 @@ class SchoolPurchaseController extends Controller
             }
         }
 
-        return redirect("/school-purchases")->with("success", "Berhasil menambahkan data Pembelian Sekolah.");
+        return redirect("/school-purchase")->with("success", "Berhasil menambahkan data Pembelian Sekolah.");
     }
 
-    // public function edit($id)
-    // {
-    //     $schoolPurchase = SchoolPurchase::findOrFail($id);
-    //     return view("admin.sekolah.edit", compact("schoolPurchase"));
-    // }
+    public function edited($id)
+    {
+        $schoolPurchase = SchoolPurchase::findOrFail($id);
+        return view("admin.sekolah.edit", compact("schoolPurchase"));
+    }
 
     public function update(Request $request, $id)
     {
@@ -152,7 +152,7 @@ class SchoolPurchaseController extends Controller
 
         $schoolPurchase->update($data);
 
-        return redirect("/school-purchases")->with("success", "Berhasil memperbarui data Pembelian Sekolah.");
+        return redirect("/school-purchase")->with("success", "Berhasil memperbarui data Pembelian Sekolah.");
     }
 
     public function getDamaged($id)
@@ -202,7 +202,7 @@ class SchoolPurchaseController extends Controller
     public function destroy($id)
     {
         SchoolPurchase::findOrFail($id)->delete();
-        return redirect("/school-purchases")->with("success", "Berhasil menghapus data Pembelian Sekolah.");
+        return redirect("/school-purchase")->with("success", "Berhasil menghapus data Pembelian Sekolah.");
     }
 
     public function print()
