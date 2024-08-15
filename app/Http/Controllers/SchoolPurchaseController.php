@@ -3,11 +3,12 @@
 namespace App\Http\Controllers;
 
 use ZipArchive;
-use Barryvdh\DomPDF\Facade\Pdf;
 use Termwind\Components\Dd;
 use Illuminate\Http\Request;
 use App\Models\SchoolPurchase;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 // use Illuminate\Support\Facades\File;
 // use Illuminate\Support\Facades\Storage;
 // use Illuminate\Support\Facades\Response;
@@ -20,6 +21,9 @@ class SchoolPurchaseController extends Controller
 
         if ($request->filled('tahun_pembelian')) {
             $query->whereYear('tanggal_pembelian', $request->tahun_pembelian);
+        }
+        if ($request->filled('bulan_pembelian')) {
+            $query->whereMonth('tanggal_pembelian', $request->bulan_pembelian);
         }
 
         // if ($request->filled('nama_barang')) {
@@ -41,26 +45,6 @@ class SchoolPurchaseController extends Controller
     {
         $schoolPurchases = SchoolPurchase::all();
         return view("admin.sekolah.damagedItems", compact("schoolPurchases"));
-    }
-
-    public function filterByYear(Request $request)
-    {
-        $query = SchoolPurchase::query();
-
-        // Get the list of years
-        $years = SchoolPurchase::selectRaw('YEAR(tanggal_pembelian) as year')
-            ->distinct()
-            ->orderBy('year', 'desc')
-            ->pluck('year');
-
-        // Filter by year if selected
-        if ($request->has('year') && !empty($request->year)) {
-            $query->whereYear('tanggal_pembelian', $request->year);
-        }
-
-        $schoolPurchases = $query->get();
-
-        return view('admin.sekolah.index', compact('schoolPurchases', 'years'));
     }
 
     public function store(Request $request)
@@ -119,7 +103,7 @@ class SchoolPurchaseController extends Controller
             "nama_barang" => "required",
             "kode" => "required|unique:school_purchases,kode," . $id,
             "harga_satuan" => "required",
-            "jumlah" => "required",
+            "jumlah_baik" => "required",
             "total_harga" => "required",
             "pembeli" => "required",
             "toko" => "required",
@@ -129,9 +113,9 @@ class SchoolPurchaseController extends Controller
             "tanggal_pembelian.required" => "Tanggal Pembelian harus diisi",
             "nama_barang.required" => "Nama Barang harus diisi",
             "kode.required" => "Kode harus diisi",
-            "kode.unique" => "Kode sudah digunakan",
+            "kode.unique" => "Kode harus unik",
             "harga_satuan.required" => "Harga Satuan harus diisi",
-            "jumlah.required" => "Jumlah harus diisi",
+            "jumlah_baik.required" => "Jumlah harus diisi",
             "total_harga.required" => "Total Harga harus diisi",
             "pembeli.required" => "Pembeli harus diisi",
             "toko.required" => "Toko harus diisi",
@@ -141,19 +125,29 @@ class SchoolPurchaseController extends Controller
         ]);
 
         $schoolPurchase = SchoolPurchase::findOrFail($id);
-        $data = $request->except('gambar');
+
+        // Update data selain gambar
+        $schoolPurchase->update($request->except(['gambar']));
 
         if ($request->hasFile('gambar')) {
+            // Hapus gambar lama dari database dan storage
+            $oldImages = $schoolPurchase->images;
+            foreach ($oldImages as $image) {
+                Storage::disk('public')->delete('school_purchases/' . $image->path); // Sesuaikan jalur penyimpanan gambar
+                $image->delete();
+            }
+
+            // Simpan gambar baru
             foreach ($request->file('gambar') as $file) {
                 $path = $file->storeAs('school_purchases', $file->getClientOriginalName(), 'public');
                 $schoolPurchase->images()->create(['path' => $path]);
             }
         }
 
-        $schoolPurchase->update($data);
-
         return redirect("/school-purchase")->with("success", "Berhasil memperbarui data Pembelian Sekolah.");
     }
+
+
 
     public function getDamaged($id)
     {

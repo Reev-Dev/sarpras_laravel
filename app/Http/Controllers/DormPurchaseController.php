@@ -8,6 +8,7 @@ use Termwind\Components\Dd;
 use App\Models\DormPurchase;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 class DormPurchaseController extends Controller
 {
@@ -17,6 +18,9 @@ class DormPurchaseController extends Controller
 
         if ($request->filled('tahun_pembelian')) {
             $query->whereYear('tanggal_pembelian', $request->tahun_pembelian);
+        }
+        if ($request->filled('bulan_pembelian')) {
+            $query->whereMonth('tanggal_pembelian', $request->bulan_pembelian);
         }
 
         // if ($request->filled('nama_barang')) {
@@ -80,11 +84,11 @@ class DormPurchaseController extends Controller
         return redirect("/dorm-purchase")->with("success", "Berhasil menambahkan data Pembelian Asrama.");
     }
 
-    // public function edit($id)
-    // {
-    //     $dormPurchase = DormPurchase::findOrFail($id);
-    //     return view("admin.asrama.edit", compact("dormPurchase"));
-    // }
+    public function edited($id)
+    {
+        $dormPurchase = DormPurchase::findOrFail($id);
+        return view("admin.asrama.edit", compact("dormPurchase"));
+    }
 
     public function update(Request $request, $id)
     {
@@ -115,16 +119,24 @@ class DormPurchaseController extends Controller
         ]);
 
         $dormPurchase = DormPurchase::findOrFail($id);
-        $data = $request->except('gambar');
+
+        // Update data selain gambar
+        $dormPurchase->update($request->except(['gambar']));
 
         if ($request->hasFile('gambar')) {
+            // Hapus gambar lama dari database dan storage
+            $oldImages = $dormPurchase->images;
+            foreach ($oldImages as $image) {
+                Storage::disk('public')->delete('dorm_purchases/' . $image->path);
+                $image->delete();
+            }
+
+            // Simpan gambar baru
             foreach ($request->file('gambar') as $file) {
                 $path = $file->storeAs('dorm_purchases', $file->getClientOriginalName(), 'public');
                 $dormPurchase->images()->create(['path' => $path]);
             }
         }
-
-        $dormPurchase->update($data);
 
         return redirect("/dorm-purchase")->with("success", "Berhasil memperbarui data Pembelian Asrama.");
     }
