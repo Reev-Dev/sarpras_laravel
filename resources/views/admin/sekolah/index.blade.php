@@ -469,8 +469,99 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <a href="{{ route('school-purchases.download', $item->id) }}"
-                                                        class="btn btn-primary">Download</a>
+                                                    <div class="col-6 col-sm-4 col-md-2 col-xl-auto me-2">
+                                                        <a href="{{ route('school-purchases.destroy', $item->id) }}"
+                                                            class="btn w-100 btn-icon btn-danger"
+                                                            data-bs-toggle="modal"
+                                                            data-bs-target="#modal-delete-{{ $item->id }}">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24"
+                                                                height="24" viewBox="0 0 24 24" fill="none"
+                                                                stroke="currentColor" stroke-width="2"
+                                                                stroke-linecap="round" stroke-linejoin="round"
+                                                                class="icon icon-tabler icons-tabler-outline icon-tabler-trash">
+                                                                <path stroke="none" d="M0 0h24v24H0z"
+                                                                    fill="none" />
+                                                                <path d="M4 7l16 0" />
+                                                                <path d="M10 11l0 6" />
+                                                                <path d="M14 11l0 6" />
+                                                                <path
+                                                                    d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" />
+                                                                <path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" />
+                                                            </svg>
+                                                        </a>
+                                                        <div class="modal modal-blur fade"
+                                                            id="modal-delete-{{ $item->id }}" tabindex="-1"
+                                                            style="display: none;" aria-hidden="true">
+                                                            <div class="modal-dialog modal-sm modal-dialog-centered"
+                                                                role="document">
+                                                                <form
+                                                                    action="{{ route('school-purchases.destroy', $item->id) }}"
+                                                                    method="post">
+                                                                    @csrf
+                                                                    @method('delete')
+                                                                    <div class="modal-content">
+                                                                        <button type="button" class="btn-close"
+                                                                            data-bs-dismiss="modal"
+                                                                            aria-label="Close"></button>
+                                                                        <div class="modal-status bg-danger"></div>
+                                                                        <div class="modal-body text-center py-4">
+                                                                            <!-- Download SVG icon from http://tabler-icons.io/i/alert-triangle -->
+                                                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                                                width="24" height="24"
+                                                                                viewBox="0 0 24 24"
+                                                                                fill="currentColor"
+                                                                                class="icon mb-2 text-danger icon-lg mx-auto icon-tabler-alert-triangle">
+                                                                                <path stroke="none" d="M0 0h24v24H0z"
+                                                                                    fill="none" />
+                                                                                <path
+                                                                                    d="M12 1.67c.955 0 1.845 .467 2.39 1.247l.105 .16l8.114 13.548a2.914 2.914 0 0 1 -2.307 4.363l-.195 .008h-16.225a2.914 2.914 0 0 1 -2.582 -4.2l.099 -.185l8.11 -13.538a2.914 2.914 0 0 1 2.491 -1.403zm.01 13.33l-.127 .007a1 1 0 0 0 0 1.986l.117 .007l.127 -.007a1 1 0 0 0 0 -1.986l-.117 -.007zm-.01 -7a1 1 0 0 0 -.993 .883l-.007 .117v4l.007 .117a1 1 0 0 0 1.986 0l.007 -.117v-4l-.007 -.117a1 1 0 0 0 -.993 -.883z" />
+                                                                            </svg>
+                                                                            <h3>Apakah Anda Yakin?</h3>
+                                                                            <div class="text-secondary">Apakah Anda
+                                                                                benar-benar ingin menghapus data ini?
+                                                                                Apa
+                                                                                yang telah Anda lakukan tidak dapat
+                                                                                dibatalkan.</div>
+                                                                        </div>
+                                                                        <div class="modal-footer">
+                                                                            <div class="w-100">
+                                                                                <div class="row">
+                                                                                    <div class="col"><a
+                                                                                            href="#"
+                                                                                            class="btn w-100"
+                                                                                            data-bs-dismiss="modal">
+                                                                                            Batal
+                                                                                        </a></div>
+                                                                                    <div class="col"> <button
+                                                                                            type="submit"
+                                                                                            class="btn btn-danger w-100"
+                                                                                            data-bs-dismiss="modal">
+                                                                                            Hapus
+                                                                                        </button></div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-6 col-sm-4 col-md-2 col-xl-auto me-2">
+                                                        <a href="{{ route('school-purchases.download', $item->id) }}"
+                                                            class="btn w-100 btn-icon btn-primary">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24"
+                                                                height="24" viewBox="0 0 24 24" fill="none"
+                                                                stroke="currentColor" stroke-width="2"
+                                                                stroke-linecap="round" stroke-linejoin="round"
+                                                                class="icon icon-tabler icons-tabler-outline icon-tabler-download">
+                                                                <path stroke="none" d="M0 0h24v24H0z"
+                                                                    fill="none" />
+                                                                <path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-2" />
+                                                                <path d="M7 11l5 5l5 -5" />
+                                                                <path d="M12 4l0 12" />
+                                                            </svg>
+                                                        </a>
+                                                    </div>
                                                 </div>
                                             </td>
                                         </tr>

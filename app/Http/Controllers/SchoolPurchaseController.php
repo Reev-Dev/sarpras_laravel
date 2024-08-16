@@ -113,7 +113,7 @@ class SchoolPurchaseController extends Controller
             "tanggal_pembelian.required" => "Tanggal Pembelian harus diisi",
             "nama_barang.required" => "Nama Barang harus diisi",
             "kode.required" => "Kode harus diisi",
-            "kode.unique" => "Kode harus unik",
+            "kode.unique" => "Kode sudah digunakan",
             "harga_satuan.required" => "Harga Satuan harus diisi",
             "jumlah_baik.required" => "Jumlah harus diisi",
             "total_harga.required" => "Total Harga harus diisi",
